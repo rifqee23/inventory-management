@@ -23,4 +23,24 @@ router.post('/register', async (req, res, next) => {
     }
 });
 
+router.post('/login', async (req, res, next) => {
+    const {username, password} = req.body;
+    try {
+        const user = await authService.login(username, password);
+        res.status(200).json({
+            data: {
+                username: user.username,
+                role : user.role
+            },
+            message: "Login Success!"
+        });
+    } catch (error) {
+        res.status(400). json(
+            {
+                error: error.message
+            }
+        )
+    }
+})
+
 export default router;
