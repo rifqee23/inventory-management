@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id    Int        @id @default(autoincrement())
+  username   String     @unique
+  email      String     @unique
+  password   String?
+  created_at DateTime   @default(now())
+  role       UserRole   @default(SUPPLYER)
+  token      String?
+  Supplyer   Supplyer[]
+  Order      Order[]
+}
+
+model Supplyer {
+  supplyer_id Int     @id @default(autoincrement())
+  user_id     Int
+  user        User    @relation(fields: [user_id], references: [user_id])
+  username    String  @unique
+  address     String
+  Order       Order[]
+}
+
+model Order {
+  order_id    Int         @id @default(autoincrement())
+  supplyer_id Int
+  user_id     Int
+  user        User        @relation(fields: [user_id], references: [user_id])
+  supplyer    Supplyer    @relation(fields: [supplyer_id], references: [supplyer_id])
+  status      OrderStatus @default(PENDING)
+  order_date  DateTime    @default(now())
+  quantity    Int
+  Label       Label[]
+}
+
+model Label {
+  label_id   Int      @id
+  order      Order    @relation(fields: [order_id], references: [order_id])
+  order_id   Int      @unique
+  label      String
+  created_at DateTime @default(now())
+}
+
+enum UserRole {
+  SUPPLYER
+  STACKHOLDER
+}
+
+enum OrderStatus {
+  PENDING
+  REJECTED
+  ON_PROCESS
+  DONE
+}
