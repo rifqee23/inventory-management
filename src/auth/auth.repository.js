@@ -1,4 +1,4 @@
-import prisma from "../db";
+import prisma from "../db.js";
 
 async function createUser(userData) {
 
@@ -11,4 +11,11 @@ async function createUser(userData) {
 
 }
 
-export default {createUser}
+async function findUserByUsername(username) {
+    return prisma.user.findUnique({where: {username}})
+}
+
+export default {
+    createUser,
+    findUserByUsername
+};

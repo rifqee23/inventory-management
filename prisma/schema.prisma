@@ -20,7 +20,7 @@ model User {
   password   String?
   created_at DateTime   @default(now())
   role       UserRole   @default(SUPPLYER)
-  token      String?
+  // token      String?
   Supplyer   Supplyer[]
   Order      Order[]
 }
