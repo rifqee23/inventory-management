@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import userRepository from './auth.repository.js';
+import jwt from 'jsonwebtoken';
 
 async function register(username, email, password) {
     try {
@@ -26,7 +27,18 @@ async function login(username, password) {
     if (!isValidPassword) {
         throw new Error('Invalid username or password');
     }
-    return user;
+    const token = generateToken(user);
+    return {user, token };
+}
+
+function generateToken(user) {
+    return jwt.sign({
+        userId: user.id, username: user.username, email: user.email, role: user.role
+    },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: '1d'
+        });
 }
 
 export default {
