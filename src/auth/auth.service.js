@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
+
 import {createUser, findUserByUsername} from './auth.repository.js';
+
 import jwt from 'jsonwebtoken';
 
 async function register(username, email, password) {
@@ -29,6 +31,16 @@ async function login(username, password) {
     }
     const token = generateToken(user);
     return {user, token };
+}
+
+function generateToken(user) {
+    return jwt.sign({
+        userId: user.id, username: user.username, email: user.email, role: user.role
+    },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: '1d'
+        });
 }
 
 function generateToken(user) {
