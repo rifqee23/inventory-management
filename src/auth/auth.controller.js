@@ -1,12 +1,12 @@
 import express from "express";
-import authService from "./auth.service.js";
+import {register, login} from "./auth.service.js";
 
-const router = express.Router();
+export const router = express.Router();
 
 router.post('/register', async (req, res, next) => {
     const {username, email, password} = req.body;
     try {
-        const newUser = await authService.register(username, email, password);
+        const newUser = await register(username, email, password);
         res.status(201).json({
             data: {
                 username: newUser.username,
@@ -26,7 +26,7 @@ router.post('/register', async (req, res, next) => {
 router.post('/login', async (req, res, next) => {
     const {username, password} = req.body;
     try {
-        const {user, token} = await authService.login(username, password);
+        const {user, token} = await login(username, password);
         res.status(200).json({
             data: {
                 username: user.username,
@@ -43,5 +43,3 @@ router.post('/login', async (req, res, next) => {
         )
     }
 })
-
-export default router;

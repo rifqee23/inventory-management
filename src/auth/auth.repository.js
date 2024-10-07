@@ -15,7 +15,7 @@ async function findUserByUsername(username) {
     return prisma.user.findUnique({where: {username}})
 }
 
-export default {
+export  {
     createUser,
     findUserByUsername
 };
