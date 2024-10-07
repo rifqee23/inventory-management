@@ -14,54 +14,44 @@ datasource db {
 }
 
 model User {
-  user_id    Int        @id @default(autoincrement())
-  username   String     @unique
-  email      String     @unique
-  password   String?
-  created_at DateTime   @default(now())
-  role       UserRole   @default(SUPPLYER)
-  // token      String?
-  Supplyer   Supplyer[]
-  Order      Order[]
+  id          Int           @id @default(autoincrement())
+  username    String        @unique
+  email       String        @unique
+  password    String?
+  created_at  DateTime      @default(now())
+  role        UserRole      @default(USER)
+  transaction Transaction[]
 }
 
-model Supplyer {
-  supplyer_id Int     @id @default(autoincrement())
-  user_id     Int
-  user        User    @relation(fields: [user_id], references: [user_id])
-  username    String  @unique
-  address     String
-  Order       Order[]
-}
-
-model Order {
-  order_id    Int         @id @default(autoincrement())
-  supplyer_id Int
-  user_id     Int
-  user        User        @relation(fields: [user_id], references: [user_id])
-  supplyer    Supplyer    @relation(fields: [supplyer_id], references: [supplyer_id])
-  status      OrderStatus @default(PENDING)
-  order_date  DateTime    @default(now())
+model Item {
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String?
   quantity    Int
-  Label       Label[]
+  created_at  DateTime      @default(now())
+  transaction Transaction[]
 }
 
-model Label {
-  label_id   Int      @id
-  order      Order    @relation(fields: [order_id], references: [order_id])
-  order_id   Int      @unique
-  label      String
-  created_at DateTime @default(now())
+model Transaction {
+  id               Int               @id @default(autoincrement())
+  userId           Int
+  itemId           Int
+  quantityBorrowed Int
+  borrowedAt       DateTime          @default(now())
+  returnedAt       DateTime?
+  status           TransactionStatus
+
+  User User? @relation(fields: [userId], references: [id])
+  Item Item? @relation(fields: [itemId], references: [id])
 }
 
 enum UserRole {
-  SUPPLYER
-  STACKHOLDER
+  ADMIN
+  USER
 }
 
-enum OrderStatus {
+enum TransactionStatus {
   PENDING
-  REJECTED
-  ON_PROCESS
-  DONE
+  BORROWED
+  RETURNED
 }
