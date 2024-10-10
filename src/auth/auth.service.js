@@ -33,15 +33,7 @@ async function login(username, password) {
     return {user, token };
 }
 
-function generateToken(user) {
-    return jwt.sign({
-        userId: user.id, username: user.username, email: user.email, role: user.role
-    },
-        process.env.JWT_SECRET,
-        {
-            expiresIn: '1d'
-        });
-}
+
 
 function generateToken(user) {
     return jwt.sign({
