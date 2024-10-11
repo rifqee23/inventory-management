@@ -1,8 +1,6 @@
 import express from 'express';
-import {createUser, getAllUsers, getUserById, updateUser} from "./user.service.js";
-import error from "jsonwebtoken/lib/JsonWebTokenError.js";
-import req from "express/lib/request.js";
-import {deleteUser} from "./user.repository.js";
+import {createUser, getAllUsers, getUserById, updateUser, deleteUserByid} from "./user.service.js";
+
 
 export const router = express.Router();
 
@@ -68,7 +66,7 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     const {id} = req.params;
     try{
-        const user = await deleteUser(id);
+        const user = await deleteUserByid(id);
         res.status(200).json({
             data: {
                 id: user.id

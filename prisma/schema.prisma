@@ -39,7 +39,7 @@ model Transaction {
   quantityBorrowed Int
   borrowedAt       DateTime          @default(now())
   returnedAt       DateTime?
-  status           TransactionStatus
+  status           TransactionStatus @default(PENDING)
 
   User User? @relation(fields: [userId], references: [id])
   Item Item? @relation(fields: [itemId], references: [id])
@@ -54,4 +54,5 @@ enum TransactionStatus {
   PENDING
   BORROWED
   RETURNED
+  COMPLETED
 }

@@ -36,7 +36,7 @@ async function editItemById(id, name, description, quantity) {
         }
         return await editItem(id, item);
     } catch (err) {
-        throw Error('Failed to edit item');
+        throw Error(err.message);
     }
 }
 
