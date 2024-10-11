@@ -2,6 +2,7 @@ import express from 'express';
 import { router as authRouter } from "./auth/auth.controller.js";
 import { router as itemRouter } from "./item/item.controller.js";
 import {router as userRouter} from "./user/user.controller.js";
+import {router as transactionRouter} from "./transaction/transaction.controller.js";
 import dotenv from 'dotenv'
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRouter);
 app.use('/api/items', itemRouter);
 app.use('/api/user', userRouter);
+app.use('/api/transaction', transactionRouter)
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
